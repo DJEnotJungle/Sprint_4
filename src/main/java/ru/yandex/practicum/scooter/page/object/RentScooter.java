@@ -9,54 +9,80 @@ import java.time.Duration;
 
 public class RentScooter {
     private final WebDriver driver;
+    //Локаторы для кнопок заказать
+    private By startTop = By.xpath("//div/button[@class='Button_Button__ra12g']");
+    private By startMid = By.xpath("//div/button[@class='Button_Button__ra12g Button_Middle__1CSJM']");
+
     //Локатор для закрытия окна куки. В моём случаии это окно мешало отработать 2 кнопки "Заказать"
     private By cookiesButton = By.xpath(".//button[@class='App_CookieButton__3cvqF']");
     //Локатор Имени заказчика
-    private By uerName = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[1]/input");
+    private By uerName = By.xpath(".//input[@placeholder='* Имя']");
     //Локатор Фамилии заказчика
-    private By userSurname = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[2]/input");
+    private By userSurname = By.xpath(".//input[@placeholder='* Фамилия']");
     //Локатор адреса доставки заказчику
-    private By deliveryAddress = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[3]/input");
+    private By deliveryAddress = By.xpath(".//input[@placeholder='* Адрес: куда привезти заказ']");
     //Локатор Станции метро доставки заказчику
     private By undergroundSelector = By.className("select-search__input");
     //Локатор телефона заказчика
-    private By phoneNumber = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[5]/input");
+    private By phoneNumber = By.xpath(".//input[@placeholder='* Телефон: на него позвонит курьер']");
     //Локатор первой кнопки далее в форме заказа
-    private By nextOne = By.xpath("//*[@id=\"root\"]/div/div[2]/div[3]/button");
+    private By nextOne = By.xpath(".//button[@class='Button_Button__ra12g Button_Middle__1CSJM']");
     //Локатор кнопки назад на втором этапе заполнения фомы
-    private By backOne = By.xpath("//*[@id=\"root\"]/div/div[2]/div[3]/button[1]");
+    private By backOne = By.xpath(".//button[@class='Button_Button__ra12g Button_Middle__1CSJM Button_Inverted__3IF-i']");
     //Локатор дата привоза самоката
-    private By rentalDate = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[1]/div[1]/div/input");
+    private By rentalDate = By.xpath(".//input[@placeholder='* Когда привезти самокат']");
     //Локатор для открытия поля ввода срока аренды
     private By timeOfRent = By.className("Dropdown-placeholder");
     //Локаторы для выборы даты. Я посчитал что удобнее будет выбирать сдесь нужные вариант, а не раздувать параметризированный тест
-    private By howManyTimeOfRent = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[2]/div[2]/div[1]"); // 1 сутки
+    private By howManyTimeOfRent = By.xpath("//div[contains(text(),'сутки')]"); // 1 сутки
     /*
-    private By howManyTimeOfRent = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[2]/div[2]/div[2]"); // 2 суток
-    private By howManyTimeOfRent = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[2]/div[2]/div[3]"); // 3 суток
-    private By howManyTimeOfRent = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[2]/div[2]/div[4]"); // 4 суток
-    private By howManyTimeOfRent = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[2]/div[2]/div[5]"); // 5 суток
-    private By howManyTimeOfRent = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[2]/div[2]/div[6]"); // 6 суток
-    private By howManyTimeOfRent = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[2]/div[2]/div[7]"); // 7 суток
+    private By howManyTimeOfRent = By.xpath("//div[contains(text(),'двое суток')]"); // 2 суток
+    private By howManyTimeOfRent = By.xpath("//div[contains(text(),'трое суток')]"); // 3 суток
+    private By howManyTimeOfRent = By.xpath("//div[contains(text(),'четверо суток')]"); // 4 суток
+    private By howManyTimeOfRent = By.xpath("//div[contains(text(),'пятеро суток')]"); // 5 суток
+    private By howManyTimeOfRent = By.xpath("//div[contains(text(),'шестеро суток')]"); // 6 суток
+    private By howManyTimeOfRent = By.xpath("//div[contains(text(),'семеро суток')]"); // 7 суток
 */
+    //Локаторы для  чёрного цвета самоката
+    private By colourBlack = By.id("black");
+    //Локаторы для серого самоката
+    private By colourGrey = By.id("grey");
+
     //Локатор для комментария курьеру
-    private By comment = By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[4]/input");
+    private By comment = By.xpath(".//input[@placeholder='Комментарий для курьера']");
     //Локатор кнопки заказать на втором этапе формы оформления заказа
-    private By nextTwo = By.xpath("//*[@id=\"root\"]/div/div[2]/div[3]/button[2]");
+    private By nextTwo = By.xpath(".//button[@class='Button_Button__ra12g Button_Middle__1CSJM']");
     //Локатор кнопки да на экране Хотите оформить заказ
-    private By nextThree = By.xpath("//*[@id=\"root\"]/div/div[2]/div[5]/div[2]/button[2]");
+    private By nextThree = By.xpath(".//button[text()='Да']");
     //Локатор кнопки назад на экране Хотите оформить заказ
-    private By backTwo = By.xpath("//*[@id=\"root\"]/div/div[2]/div[5]/div[2]/button[1]");
+    private By backTwo = By.xpath(".//button[text()='Нет']");
     //Локатор кнопки посмотреть статус заказа. Далее будет использоваться для проверк и корректности отработки теста
-    private By status = By.xpath("/html/body/div/div/div[2]/div[5]/div[2]/button");
+    private By status = By.xpath(".//button[text()='Посмотреть статус']");
     public RentScooter(WebDriver driver){
         this.driver = driver;
     }
     //Метод для двух кнопок открытия формы оформления заказа.
-    public void startRent(String button){
-        new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(By.xpath(button)));
-        driver.findElement(By.xpath(button)).click();
+    public void startRent(int numberOfButton){
+        if (numberOfButton == 1){
+            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(startTop));
+            driver.findElement(startTop).click();
+        }else {
+            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(startMid));
+            driver.findElement(startMid).click();
+        }
     }
+
+    //Метод для выбора одного из цветов
+    public void colorSelection(int numberOfColor){
+        if (numberOfColor == 1){
+            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(colourBlack));
+            driver.findElement(colourBlack).click();
+        }else {
+            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(colourGrey));
+            driver.findElement(colourGrey).click();
+        }
+    }
+
     //Метод для закрытия окна куки
     public void clickSignInButton() {
         driver.findElement(cookiesButton).click();
@@ -72,7 +98,7 @@ public class RentScooter {
         driver.findElement(nextOne).click();
     }
     //Метод для заполнения второй части формы оформления заказа
-    public void secondFormForRent(String changeRentalDate, String changeColor, String comments){
+    public void secondFormForRent(String changeRentalDate, int numberOfColor, String comments){
         new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(backOne));
         driver.findElement(backOne).click(); //Проверяем что кнопка назад работает
         new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(nextOne));
@@ -80,7 +106,7 @@ public class RentScooter {
         driver.findElement(rentalDate).sendKeys(changeRentalDate, Keys.ARROW_DOWN, Keys.ENTER);
         driver.findElement(timeOfRent).click();
         driver.findElement(howManyTimeOfRent).click();
-        driver.findElement(By.id(changeColor)).click();
+        colorSelection(numberOfColor);
         driver.findElement(comment).sendKeys(comments);
         driver.findElement(nextTwo).click();
     }
@@ -94,4 +120,4 @@ public class RentScooter {
         driver.findElement(nextThree).click();
         return driver.findElement(status).getText();
     }
-}//
+}
